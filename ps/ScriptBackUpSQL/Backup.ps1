@@ -1,20 +1,20 @@
-#Путь к папке бэкапов в которую бэкапится база SQL сервера
-$path = "X:\MSSQL11.MSSQLSERVER\MSSQL\Backup\EHM"
+#РџСѓС‚СЊ Рє РїР°РїРєРµ Р±СЌРєР°РїРѕРІ РІ РєРѕС‚РѕСЂСѓСЋ Р±СЌРєР°РїРёС‚СЃСЏ Р±Р°Р·Р° SQL СЃРµСЂРІРµСЂР°
+$path = "C:\Backup"
 
-#Путь к папке в которую нужно переместить бэкапы
-$dest = "\\nfs\EHMBackups"
+#РџСѓС‚СЊ Рє РїР°РїРєРµ РІ РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ РїРµСЂРµРјРµСЃС‚РёС‚СЊ Р±СЌРєР°РїС‹
+$dest = "\\dnsORip\pathTOfolder\Backup"
 
-#Проверка наличия подключения диска с бэкапами SQL, в один момент времени он подключен только к одному из SQL серверов
+#РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РґРёСЃРєР° СЃ Р±СЌРєР°РїР°РјРё SQL, РІ РѕРґРёРЅ РјРѕРјРµРЅС‚ РІСЂРµРјРµРЅРё РѕРЅ РїРѕРґРєР»СЋС‡РµРЅ С‚РѕР»СЊРєРѕ Рє РѕРґРЅРѕРјСѓ РёР· SQL СЃРµСЂРІРµСЂРѕРІ
 
 $isFile = Test-Path $path
 if($isFile -eq "True") {
     robocopy $path $dest *.bak /MOV
     $datetimeold = Get-Date
-    #отнимаем 20 дней
+    #РѕС‚РЅРёРјР°РµРј 20 РґРЅРµР№
     $datetimeold = $datetimeold.AddDays(-20)
-    #Процесс удаления старых файлов
+    #РџСЂРѕС†РµСЃСЃ СѓРґР°Р»РµРЅРёСЏ СЃС‚Р°СЂС‹С… С„Р°Р№Р»РѕРІ
     ls -r $dest | Where-Object{$datetimeold -gt $_.LastWriteTime} | rm -Force
 }
 else {
-    Write-Host "Disk is unavaible"
+    Write-Host "Sorry Mario, but our disk is on another castle"
 }
